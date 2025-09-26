@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Widget Test</title>
+    <link rel="stylesheet" href="assets/css/widget.css">
+</head>
+<body>
+    <h1>Widget Test Sayfası</h1>
+    <p>Bu sayfa widget'ı test etmek için oluşturuldu.</p>
+
+    <div id="wpai-chat-widget-root" class="wpai-chat-widget-root wpai-chat--ready" aria-live="polite">
+        <button class="wpai-chat-button" type="button" aria-expanded="false" aria-controls="wpai-chat-panel" aria-label="WpAI Chat sohbetini aç">
+            <span class="wpai-chat-button__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                    <path d="M4.5 3h15A1.5 1.5 0 0 1 21 4.5v9A1.5 1.5 0 0 1 19.5 15H13l-3.7 3.7a.75.75 0 0 1-1.3-.53V15H4.5A1.5 1.5 0 0 1 3 13.5v-9A1.5 1.5 0 0 1 4.5 3Z"></path>
+                </svg>
+            </span>
+            <span class="wpai-chat-button__badge" hidden></span>
+        </button>
+
+        <section class="wpai-chat-panel" id="wpai-chat-panel" role="dialog" aria-hidden="true" aria-label="WpAI Chat sohbet penceresi" tabindex="-1">
+            <header class="wpai-chat-header">
+                <div class="wpai-chat-header__text">
+                    <h2 class="wpai-chat-header__title">WpAI Chat</h2>
+                    <p class="wpai-chat-header__subtitle">Sorularınızı burada iletebilirsiniz.</p>
+                    <span class="wpai-chat-header__status">Çevrimiçi</span>
+                </div>
+                <button class="wpai-chat-close" type="button" aria-label="Sohbet penceresini kapat">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6 6 18M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </header>
+
+            <div class="wpai-chat-body">
+                <div class="wpai-chat-empty">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5.25 4A2.25 2.25 0 0 0 3 6.25v7.5A2.25 2.25 0 0 0 5.25 16h.88c.3 0 .58.12.79.33l2.76 2.76A1.25 1.25 0 0 0 11.83 18h6.92A2.25 2.25 0 0 0 21 15.75v-9.5A2.25 2.25 0 0 0 18.75 4h-13.5Z"></path>
+                    </svg>
+                    <h3>Hazırsak başlayalım</h3>
+                    <p>Kısa bir merhaba yazın, sohbet buradan devam etsin.</p>
+                </div>
+            </div>
+
+            <footer class="wpai-chat-footer">
+                <div class="wpai-chat-status"></div>
+                <form class="wpai-chat-form">
+                    <textarea class="wpai-chat-input" rows="1" placeholder="Mesajınızı yazın..."></textarea>
+                    <button class="wpai-chat-send" type="submit">Gönder</button>
+                </form>
+            </footer>
+        </section>
+    </div>
+
+    <script>
+        document.querySelector('.wpai-chat-button').addEventListener('click', function() {
+            const root = document.getElementById('wpai-chat-widget-root');
+            root.classList.toggle('wpai-chat--open');
+            const button = this;
+            const isOpen = root.classList.contains('wpai-chat--open');
+            button.setAttribute('aria-expanded', isOpen);
+            document.getElementById('wpai-chat-panel').setAttribute('aria-hidden', !isOpen);
+        });
+
+        document.querySelector('.wpai-chat-close').addEventListener('click', function() {
+            const root = document.getElementById('wpai-chat-widget-root');
+            root.classList.remove('wpai-chat--open');
+            document.querySelector('.wpai-chat-button').setAttribute('aria-expanded', 'false');
+            document.getElementById('wpai-chat-panel').setAttribute('aria-hidden', 'true');
+        });
+    </script>
+</body>
+</html>

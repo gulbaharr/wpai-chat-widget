@@ -1,0 +1,319 @@
+﻿.wpai-chat-admin__root {
+    max-width: 980px;
+    margin-top: 24px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.wpai-admin {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.wpai-admin__header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 28px;
+    border-radius: 18px;
+    background: linear-gradient(145deg, #f8fafc 0%, #ffffff 100%);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 18px 34px rgba(15, 23, 42, 0.08);
+}
+
+.wpai-admin__intro {
+    max-width: 560px;
+}
+
+.wpai-admin__intro h2 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.wpai-admin__intro p {
+    margin: 8px 0 0;
+    color: #4b5563;
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+.wpai-admin__stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-start;
+    min-width: 200px;
+}
+
+.wpai-admin__stat {
+    min-width: 150px;
+    border-radius: 12px;
+    padding: 12px 16px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 20px rgba(15, 23, 42, 0.05);
+}
+
+.wpai-admin__stat-label {
+    display: block;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #6b7280;
+    margin-bottom: 6px;
+}
+
+.wpai-admin__stat-value {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.wpai-admin__stat.is-positive {
+    border-color: rgba(22, 163, 74, 0.35);
+    background: rgba(22, 163, 74, 0.1);
+    color: #166534;
+}
+
+.wpai-admin__stat.is-negative {
+    border-color: rgba(220, 38, 38, 0.35);
+    background: rgba(220, 38, 38, 0.08);
+    color: #b91c1c;
+}
+
+.wpai-admin__stat.is-muted {
+    opacity: 0.7;
+}
+
+.wpai-admin-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 16px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.wpai-admin-tabs__item {
+    border: none;
+    background: transparent;
+    color: #475569;
+    font-weight: 600;
+    padding: 10px 18px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 13px;
+}
+
+.wpai-admin-tabs__item:hover,
+.wpai-admin-tabs__item:focus {
+    background: rgba(76, 111, 255, 0.1);
+    color: #1f2937;
+    outline: none;
+}
+
+.wpai-admin-tabs__item.is-active {
+    background: #ffffff;
+    color: #111827;
+    box-shadow: 0 12px 22px rgba(15, 23, 42, 0.08);
+}
+
+.wpai-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    box-shadow: 0 16px 32px rgba(15, 23, 42, 0.08);
+}
+
+.wpai-card__header h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.wpai-card__header p {
+    margin: 10px 0 0;
+    color: #4b5563;
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+.wpai-field,
+.wpai-field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.wpai-field-grid {
+    display: grid;
+    gap: 18px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.wpai-field label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.wpai-field input[type="text"],
+.wpai-field input[type="password"],
+.wpai-field input[type="number"],
+.wpai-field input[type="url"],
+.wpai-field input[type="color"],
+.wpai-field textarea,
+.wpai-field select {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    font-size: 14px;
+    background: #f9fafb;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.wpai-field input[type="color"] {
+    padding: 4px;
+    height: 44px;
+}
+
+.wpai-field input:focus,
+.wpai-field textarea:focus,
+.wpai-field select:focus {
+    outline: none;
+    border-color: #4c6fff;
+    box-shadow: 0 0 0 3px rgba(76, 111, 255, 0.2);
+    background: #ffffff;
+}
+
+.wpai-field textarea {
+    min-height: 120px;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+.wpai-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    color: #1f2937;
+    cursor: pointer;
+    user-select: none;
+}
+
+.wpai-toggle input {
+    width: 18px;
+    height: 18px;
+}
+
+.wpai-provider-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 20px;
+    border: 1px dashed #cbd5f5;
+    border-radius: 16px;
+    background: linear-gradient(180deg, rgba(76, 111, 255, 0.08) 0%, rgba(255, 255, 255, 0.6) 100%);
+}
+
+.wpai-provider-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.wpai-provider-loading {
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 13px;
+    background: #eef2ff;
+    color: #4c6fff;
+}
+
+.wpai-admin-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 24px;
+    border-radius: 16px;
+    background: linear-gradient(120deg, #f8fafc 0%, #ffffff 100%);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.06);
+}
+
+.wpai-admin-footer__actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.wpai-admin-footer__hint {
+    font-size: 13px;
+    color: #64748b;
+}
+
+.wpai-notice {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.wpai-notice--info {
+    color: #2563eb;
+}
+
+.wpai-notice--success {
+    color: #047857;
+}
+
+.wpai-notice--error {
+    color: #b91c1c;
+}
+
+@media (max-width: 782px) {
+    .wpai-chat-admin__root {
+        max-width: 100%;
+    }
+
+    .wpai-admin__header {
+        padding: 20px;
+    }
+
+    .wpai-card {
+        padding: 22px;
+    }
+
+    .wpai-admin-tabs {
+        padding: 10px;
+    }
+
+    .wpai-admin-tabs__item {
+        flex: 1 1 45%;
+        text-align: center;
+    }
+
+    .wpai-field-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .wpai-provider-fields {
+        padding: 16px;
+    }
+
+    .wpai-admin-footer {
+        padding: 16px;
+    }
+}
