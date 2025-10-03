@@ -80,7 +80,6 @@ class SettingsRepository {
             'persona'    => $settings['persona'],
             'appearance' => $settings['appearance'],
             'behavior'   => $settings['behavior'],
-            'compliance' => $settings['compliance'],
         ];
     }
 
@@ -108,6 +107,14 @@ class SettingsRepository {
      * Default configuration scaffold.
      */
     public function get_default_settings(): array {
+        $palettes      = $this->get_theme_palettes();
+        $default_theme = 'classic';
+
+        if ( ! isset( $palettes[ $default_theme ] ) ) {
+            $keys          = array_keys( $palettes );
+            $default_theme = $keys[0] ?? 'classic';
+        }
+
         return [
             'schema_version' => '1.0.0',
             'general'        => [
@@ -122,7 +129,8 @@ class SettingsRepository {
                 'initial_messages' => [],
             ],
             'appearance'     => [
-                'colors' => [
+                'theme'        => $default_theme,
+                'colors'       => $palettes[ $default_theme ] ?? [
                     'primary'   => '#4C6FFF',
                     'secondary' => '#1F2937',
                     'accent'    => '#FACC15',
@@ -142,11 +150,6 @@ class SettingsRepository {
                 'message_limit'   => 20,
                 'session_timeout' => 900,
             ],
-            'compliance'     => [
-                'privacy_notice'  => '',
-                'cookie_notice'   => '',
-                'require_consent' => false,
-            ],
             'logging'        => [
                 'enabled'        => false,
                 'retention_days' => 30,
@@ -160,6 +163,7 @@ class SettingsRepository {
     private function sanitize_settings( array $settings ): array {
         $defaults = $this->get_default_settings();
         $merged   = wp_parse_args( $settings, $defaults );
+        $palettes = $this->get_theme_palettes();
 
         $merged['general']['widget_name']      = sanitize_text_field( $merged['general']['widget_name'] );
         $merged['general']['enabled']          = ! empty( $merged['general']['enabled'] );
@@ -174,11 +178,13 @@ class SettingsRepository {
             $merged['persona']['initial_messages'] = [];
         }
 
-        if ( isset( $merged['appearance']['colors'] ) && is_array( $merged['appearance']['colors'] ) ) {
-            foreach ( $merged['appearance']['colors'] as $key => $color ) {
-                $merged['appearance']['colors'][ $key ] = sanitize_hex_color( $color ) ?: $defaults['appearance']['colors'][ $key ];
-            }
+        $theme_slug = sanitize_key( $merged['appearance']['theme'] ?? $defaults['appearance']['theme'] );
+        if ( ! isset( $palettes[ $theme_slug ] ) ) {
+            $theme_slug = $defaults['appearance']['theme'];
         }
+
+        $merged['appearance']['theme']  = $theme_slug;
+        $merged['appearance']['colors'] = $palettes[ $theme_slug ];
 
         $allowed_positions = [ 'bottom-right', 'bottom-left' ];
         $merged['appearance']['position'] = in_array( $merged['appearance']['position'], $allowed_positions, true )
@@ -193,9 +199,6 @@ class SettingsRepository {
         $merged['behavior']['message_limit']   = max( 1, (int) $merged['behavior']['message_limit'] );
         $merged['behavior']['session_timeout'] = max( 60, (int) $merged['behavior']['session_timeout'] );
 
-        $merged['compliance']['privacy_notice']  = wp_kses_post( $merged['compliance']['privacy_notice'] );
-        $merged['compliance']['cookie_notice']   = wp_kses_post( $merged['compliance']['cookie_notice'] );
-        $merged['compliance']['require_consent'] = ! empty( $merged['compliance']['require_consent'] );
 
         $merged['logging']['enabled']        = ! empty( $merged['logging']['enabled'] );
         $merged['logging']['retention_days'] = max( 1, (int) $merged['logging']['retention_days'] );
@@ -211,6 +214,34 @@ class SettingsRepository {
         );
 
         return $merged;
+    }
+
+    /**
+     * Available theme palettes.
+     */
+    private function get_theme_palettes(): array {
+        return [
+            'classic'  => [
+                'primary'   => '#4C6FFF',
+                'secondary' => '#1F2937',
+                'accent'    => '#FACC15',
+            ],
+            'midnight' => [
+                'primary'   => '#6366F1',
+                'secondary' => '#0F172A',
+                'accent'    => '#22D3EE',
+            ],
+            'sunset'   => [
+                'primary'   => '#F97316',
+                'secondary' => '#1F2937',
+                'accent'    => '#FDE68A',
+            ],
+            'forest'   => [
+                'primary'   => '#16A34A',
+                'secondary' => '#0B1120',
+                'accent'    => '#BBF7D0',
+            ],
+        ];
     }
 
     /**

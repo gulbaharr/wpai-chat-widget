@@ -1,13 +1,10 @@
-<?php
-/**
- * Main plugin bootstrap class.
- */
-
-namespace Wpai\Chat;
+<?php namespace Wpai\Chat;
 
 use Wpai\Chat\Admin\AdminPage;
+use Wpai\Chat\LoggingRepository;
 use Wpai\Chat\Providers\ProviderManager;
 use Wpai\Chat\Rest\ChatController;
+use Wpai\Chat\Rest\LogsController;
 use Wpai\Chat\Rest\SettingsController;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -37,11 +34,25 @@ class Plugin {
     private $provider_manager;
 
     /**
+     * Logging repository.
+     *
+     * @var LoggingRepository
+     */
+    private $logging_repository;
+
+    /**
      * Chat REST controller.
      *
      * @var ChatController
      */
     private $chat_controller;
+
+    /**
+     * Logs REST controller.
+     *
+     * @var LogsController
+     */
+    private $logs_controller;
 
     /**
      * Settings REST controller.
@@ -79,7 +90,9 @@ class Plugin {
     private function __construct() {
         $this->settings_repository = new SettingsRepository();
         $this->provider_manager    = new ProviderManager( $this->settings_repository );
-        $this->chat_controller     = new ChatController( $this->settings_repository, $this->provider_manager );
+        $this->logging_repository  = new LoggingRepository( $this->settings_repository );
+        $this->chat_controller     = new ChatController( $this->settings_repository, $this->provider_manager, $this->logging_repository );
+        $this->logs_controller     = new LogsController( $this->logging_repository );
         $this->settings_controller = new SettingsController( $this->settings_repository, $this->provider_manager );
         $this->admin_page          = new AdminPage( $this->settings_repository );
 
@@ -104,6 +117,7 @@ class Plugin {
     public function register_rest_routes(): void {
         $this->chat_controller->register_routes();
         $this->settings_controller->register_routes();
+        $this->logs_controller->register_routes();
     }
 
     /**
@@ -116,28 +130,29 @@ class Plugin {
             return;
         }
 
-        $asset_handle = 'wpai-chat-widget';
-
-        $css_relative = 'assets/css/widget.css';
-        $js_relative  = 'assets/js/widget.js';
-        $css_path     = plugin_dir_path( WPAI_CHAT_PLUGIN_FILE ) . $css_relative;
-        $js_path      = plugin_dir_path( WPAI_CHAT_PLUGIN_FILE ) . $js_relative;
-        $css_version  = file_exists( $css_path ) ? filemtime( $css_path ) : WPAI_CHAT_VERSION;
-        $js_version   = file_exists( $js_path ) ? filemtime( $js_path ) : WPAI_CHAT_VERSION;
-
-        wp_register_style(
-            $asset_handle,
-            plugins_url( $css_relative, WPAI_CHAT_PLUGIN_FILE ),
-            [],
-            $css_version
-        );
-
-        wp_register_script(
-            $asset_handle,
-            plugins_url( $js_relative, WPAI_CHAT_PLUGIN_FILE ),
-            [ 'wp-api-fetch' ],
-            $js_version,
-            true
+        $asset_handle = 'wpai-chat-widget';
+
+        $css_relative = 'assets/css/widget.css';
+        $js_relative  = 'assets/js/widget.js';
+
+        $css_path    = plugin_dir_path( WPAI_CHAT_PLUGIN_FILE ) . $css_relative;
+        $js_path     = plugin_dir_path( WPAI_CHAT_PLUGIN_FILE ) . $js_relative;
+        $css_version = file_exists( $css_path ) ? filemtime( $css_path ) : WPAI_CHAT_VERSION;
+        $js_version  = file_exists( $js_path ) ? filemtime( $js_path ) : WPAI_CHAT_VERSION;
+
+        wp_register_style(
+            $asset_handle,
+            plugins_url( $css_relative, WPAI_CHAT_PLUGIN_FILE ),
+            [],
+            $css_version
+        );
+
+        wp_register_script(
+            $asset_handle,
+            plugins_url( $js_relative, WPAI_CHAT_PLUGIN_FILE ),
+            [ 'wp-api-fetch' ],
+            $js_version,
+            true
         );
 
         wp_enqueue_style( $asset_handle );
@@ -187,6 +202,3 @@ class Plugin {
         return ob_get_clean();
     }
 }
-
-
-

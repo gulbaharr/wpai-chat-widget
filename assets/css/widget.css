@@ -14,8 +14,12 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     
     /* Clean white palette */
-    --wpai-primary: #3b82f6;
-    --wpai-primary-dark: #2563eb;
+    --wpai-primary: #4c6fff;
+    --wpai-primary-dark: #3b5bff;
+    --wpai-secondary: #1f2937;
+    --wpai-accent: #facc15;
+    --wpai-accent-shadow: rgba(250, 204, 21, 0.35);
+    --wpai-primary-focus: rgba(76, 111, 255, 0.3);
     --wpai-surface: #ffffff;
     --wpai-surface-elevated: #ffffff;
     --wpai-surface-alt: #fafafa;
@@ -29,6 +33,81 @@
     --wpai-radius: 12px;
 }
 
+.wpai-chat-widget-root.wpai-theme-classic {
+    --wpai-primary: #4c6fff;
+    --wpai-primary-dark: #3b5bff;
+    --wpai-secondary: #1f2937;
+    --wpai-accent: #facc15;
+    --wpai-accent-shadow: rgba(250, 204, 21, 0.35);
+    --wpai-primary-focus: rgba(76, 111, 255, 0.3);
+    --wpai-surface: #ffffff;
+    --wpai-surface-elevated: #ffffff;
+    --wpai-surface-alt: #fafafa;
+    --wpai-border: #e5e5e5;
+    --wpai-border-light: #f5f5f5;
+    --wpai-text: #1a1a1a;
+    --wpai-text-muted: #737373;
+    --wpai-text-light: #a3a3a3;
+    --wpai-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --wpai-shadow-lg: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.wpai-chat-widget-root.wpai-theme-midnight {
+    --wpai-primary: #6366f1;
+    --wpai-primary-dark: #4f46e5;
+    --wpai-secondary: #0f172a;
+    --wpai-accent: #22d3ee;
+    --wpai-accent-shadow: rgba(34, 211, 238, 0.25);
+    --wpai-primary-focus: rgba(79, 70, 229, 0.4);
+    --wpai-surface: #0f172a;
+    --wpai-surface-elevated: #111c34;
+    --wpai-surface-alt: #1e293b;
+    --wpai-border: #1f2a44;
+    --wpai-border-light: #24324d;
+    --wpai-text: #e2e8f0;
+    --wpai-text-muted: #94a3b8;
+    --wpai-text-light: #64748b;
+    --wpai-shadow: 0 18px 36px rgba(8, 15, 35, 0.55);
+    --wpai-shadow-lg: 0 28px 44px rgba(15, 23, 42, 0.6);
+}
+
+.wpai-chat-widget-root.wpai-theme-sunset {
+    --wpai-primary: #f97316;
+    --wpai-primary-dark: #ea580c;
+    --wpai-secondary: #7c2d12;
+    --wpai-accent: #fb923c;
+    --wpai-accent-shadow: rgba(249, 115, 22, 0.35);
+    --wpai-primary-focus: rgba(249, 115, 22, 0.35);
+    --wpai-surface: #fff7ed;
+    --wpai-surface-elevated: #ffffff;
+    --wpai-surface-alt: #ffe4d4;
+    --wpai-border: #fed7aa;
+    --wpai-border-light: #fde68a;
+    --wpai-text: #7c2d12;
+    --wpai-text-muted: #9a3412;
+    --wpai-text-light: #fbbf24;
+    --wpai-shadow: 0 14px 28px rgba(249, 115, 22, 0.18);
+    --wpai-shadow-lg: 0 24px 40px rgba(249, 115, 22, 0.22);
+}
+
+.wpai-chat-widget-root.wpai-theme-forest {
+    --wpai-primary: #16a34a;
+    --wpai-primary-dark: #15803d;
+    --wpai-secondary: #065f46;
+    --wpai-accent: #22c55e;
+    --wpai-accent-shadow: rgba(34, 197, 94, 0.3);
+    --wpai-primary-focus: rgba(22, 163, 74, 0.35);
+    --wpai-surface: #f0fdf4;
+    --wpai-surface-elevated: #ffffff;
+    --wpai-surface-alt: #dcfce7;
+    --wpai-border: #bbf7d0;
+    --wpai-border-light: #d9f99d;
+    --wpai-text: #064e3b;
+    --wpai-text-muted: #0f766e;
+    --wpai-text-light: #34d399;
+    --wpai-shadow: 0 14px 24px rgba(21, 128, 61, 0.18);
+    --wpai-shadow-lg: 0 26px 36px rgba(21, 128, 61, 0.22);
+}
 .wpai-chat-widget-root * {
     box-sizing: border-box;
     font-family: inherit;
@@ -49,7 +128,7 @@
 }
 
 .wpai-chat-widget-root.wpai-chat--unread .wpai-chat-button {
-    box-shadow: 0 12px 28px rgba(249, 115, 22, 0.35);
+    box-shadow: 0 12px 28px var(--wpai-accent-shadow, rgba(249, 115, 22, 0.35));
 }
 
 .wpai-chat-button {
@@ -76,7 +155,7 @@
 
 .wpai-chat-button:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+    box-shadow: 0 0 0 3px var(--wpai-primary-focus, rgba(76, 111, 255, 0.3));
 }
 
 .wpai-chat-button:active {
@@ -104,7 +183,7 @@
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #f97316, #fb923c);
+    background: var(--wpai-accent, #f97316);
     border: 2px solid #ffffff;
     box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.55);
 }
@@ -328,10 +407,21 @@
 }
 
 .wpai-chat-status {
-    display: none;
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--wpai-text-muted);
+    margin: 0 0 8px;
 }
 
-.wpai-chat-consent {
+.wpai-chat-status.is-error {
+    color: #ef4444;
+}
+
+.wpai-chat-status.is-info {
+    color: var(--wpai-primary);
+}
+
+.wpai-chat-status[hidden] {
     display: none;
 }
 
@@ -610,3 +700,4 @@
         color: var(--wpai-text);
     }
 }
+

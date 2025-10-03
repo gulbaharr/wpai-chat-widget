@@ -32,5 +32,8 @@ if ( ! file_exists( $bootstrap_path ) ) {
 
 require_once $bootstrap_path;
 
-
-
+register_activation_hook( __FILE__, function () {
+    if ( class_exists( 'Wpai\\Chat\\LoggingRepository' ) ) {
+        Wpai\Chat\LoggingRepository::install();
+    }
+});

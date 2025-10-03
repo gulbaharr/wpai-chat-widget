@@ -59,18 +59,23 @@ class AdminPage {
 
         $asset_handle = 'wpai-chat-admin';
 
+        $css_file = plugin_dir_path( WPAI_CHAT_PLUGIN_FILE ) . 'assets/css/admin.css';
+        $js_file  = plugin_dir_path( WPAI_CHAT_PLUGIN_FILE ) . 'assets/js/admin.js';
+        $css_ver  = file_exists( $css_file ) ? filemtime( $css_file ) : WPAI_CHAT_VERSION;
+        $js_ver   = file_exists( $js_file ) ? filemtime( $js_file ) : WPAI_CHAT_VERSION;
+
         wp_enqueue_style(
             $asset_handle,
             plugins_url( 'assets/css/admin.css', WPAI_CHAT_PLUGIN_FILE ),
             [],
-            WPAI_CHAT_VERSION
+            $css_ver
         );
 
         wp_enqueue_script(
             $asset_handle,
             plugins_url( 'assets/js/admin.js', WPAI_CHAT_PLUGIN_FILE ),
             [ 'wp-api-fetch' ],
-            WPAI_CHAT_VERSION,
+            $js_ver,
             true
         );
 
@@ -81,6 +86,7 @@ class AdminPage {
                 'settings'   => $this->settings_repository->get_settings(),
                 'apiPath'    => 'wpai/v1/settings',
                 'modelsPath' => 'wpai/v1/models',
+                'logsPath'   => 'wpai/v1/logs',
                 'nonce'      => wp_create_nonce( 'wp_rest' ),
             ]
         );

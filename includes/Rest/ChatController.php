@@ -5,6 +5,7 @@
 
 namespace Wpai\Chat\Rest;
 
+use Wpai\Chat\LoggingRepository;
 use Wpai\Chat\Providers\ProviderException;
 use Wpai\Chat\Providers\ProviderManager;
 use Wpai\Chat\SettingsRepository;
@@ -38,11 +39,19 @@ class ChatController {
     private $provider_manager;
 
     /**
+     * Logging repository reference.
+     *
+     * @var LoggingRepository|null
+     */
+    private $logging_repository;
+
+    /**
      * Constructor.
      */
-    public function __construct( SettingsRepository $settings_repository, ProviderManager $provider_manager ) {
+    public function __construct( SettingsRepository $settings_repository, ProviderManager $provider_manager, LoggingRepository $logging_repository = null ) {
         $this->settings_repository = $settings_repository;
         $this->provider_manager    = $provider_manager;
+        $this->logging_repository  = $logging_repository;
     }
 
     /**
@@ -96,12 +105,9 @@ class ChatController {
      * Create a chat session.
      */
     public function create_session( WP_REST_Request $request ) {
-        $consent = (bool) $request->get_param( 'consent' );
-
         $session = [
             'session_id' => wp_generate_uuid4(),
             'expires_at' => time() + (int) apply_filters( 'wpai_chat_session_ttl', 3600 ),
-            'consent'    => $consent,
         ];
 
         do_action( 'wpai_chat_session_created', $session, $request );
@@ -157,6 +163,8 @@ class ChatController {
 
         do_action( 'wpai_chat_message_processed', $response, $request );
 
+        $this->log_interaction( $session_id, $provider_slug, $messages, $assistant_message, $result['usage'] ?? [] );
+
         return new WP_REST_Response( $response, 200 );
     }
 
@@ -194,11 +202,11 @@ class ChatController {
      * Resolve provider slug using request override when allowed.
      */
     private function resolve_provider_slug( WP_REST_Request $request ): string {
-        $active          = $this->settings_repository->get_active_provider_slug();
-        $requested       = sanitize_key( (string) $request->get_param( 'provider' ) );
-        $has_request     = ! empty( $requested );
+        $active            = $this->settings_repository->get_active_provider_slug();
+        $requested         = sanitize_key( (string) $request->get_param( 'provider' ) );
+        $has_request       = ! empty( $requested );
         $has_configuration = $has_request ? $this->settings_repository->get_provider_settings( $requested ) : [];
-        $allow_override  = apply_filters( 'wpai_chat_allow_provider_override', true, $requested, $request );
+        $allow_override    = apply_filters( 'wpai_chat_allow_provider_override', true, $requested, $request );
 
         if ( $has_request && ! empty( $has_configuration ) && $allow_override ) {
             return $requested;
@@ -277,6 +285,17 @@ class ChatController {
     }
 
     /**
+     * Persist interaction to log store when configured.
+     */
+    private function log_interaction( string $session_id, string $provider_slug, array $messages, array $assistant_message, array $usage ): void {
+        if ( ! $this->logging_repository ) {
+            return;
+        }
+
+        $this->logging_repository->log_interaction( $session_id, $provider_slug, $messages, $assistant_message, $usage );
+    }
+
+    /**
      * Build provider context data.
      */
     private function build_context( array $settings ): array {
@@ -290,7 +309,3 @@ class ChatController {
         return apply_filters( 'wpai_chat_context', $context, $settings );
     }
 }
-
-
-
-
